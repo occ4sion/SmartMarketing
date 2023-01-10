@@ -4,6 +4,7 @@ from numpy import vstack
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error as MSE
 from sklearn.preprocessing import PolynomialFeatures
+import clickhouse_connect
 
 MODEL, X, Y, POLY = None, None, None, None
 
@@ -75,8 +76,16 @@ def predict(path):
 
     return True
 
+def clickhouse(cmd, params):
+    params = params.split(',')
+    params = [param.split('=') for param in params]
+    params = [[param.strip() for param in pair] for pair in params]
+    params = dict(params)
+    client = clickhouse_connect.get_client(params)
+    return client.command(cmd)
+
 def main():
-    return fit('data/')
+    return 0
 
 if __name__ == '__main__':
     main()
